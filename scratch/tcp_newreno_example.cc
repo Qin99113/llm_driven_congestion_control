@@ -124,7 +124,7 @@ main(int argc, char* argv[])
     strftime(buffer, sizeof(buffer), "%d-%m-%Y-%I-%M-%S", timeinfo);
     std::string currentTime(buffer);
 
-    std::string tcpTypeId = "TcpBbr";
+    std::string tcpTypeId = "TcpNewReno";
     std::string queueDisc = "FifoQueueDisc";
     uint32_t delAckCount = 2;
     bool bql = true;
@@ -224,7 +224,7 @@ main(int argc, char* argv[])
     sinkApps.Stop(stopTime);
 
     // Create a new directory to store the output of the program
-    dir = "bbr-results/" + currentTime + "/";
+    dir = "newreno-results/" + currentTime + "/";
     std::string dirToSave = "mkdir -p " + dir;
     if (system(dirToSave.c_str()) == -1)
     {
