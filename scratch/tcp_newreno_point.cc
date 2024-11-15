@@ -121,6 +121,7 @@ int main(int argc, char* argv[])
     }
 
     // Run the simulation
+    Simulator::Stop(Seconds(10.1));
     Simulator::Run();
     Simulator::Destroy();
 
