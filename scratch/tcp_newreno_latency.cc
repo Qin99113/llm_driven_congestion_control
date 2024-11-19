@@ -11,35 +11,9 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("TcpExample");
 
 std::string dir;
-std::map<uint64_t, Time> packetSentTimestamps; // Map to store packet sent timestamps
 uint32_t prev = 0;
 Time prevTime = Seconds(0);
 
-// Callback for sending packets
-void PacketSentCallback(Ptr<const Packet> packet)
-{
-    uint64_t uid = packet->GetUid(); // Get the unique ID of the packet
-    packetSentTimestamps[uid] = Simulator::Now(); // Record the sending time
-}
-
-// Callback for receiving packets
-void PacketReceivedCallback(Ptr<const Packet> packet)
-{
-    uint64_t uid = packet->GetUid(); // Get the unique ID of the packet
-    auto it = packetSentTimestamps.find(uid);
-
-    if (it != packetSentTimestamps.end())
-    {
-        Time sentTime = it->second; // Get the sending time
-        Time latency = Simulator::Now() - sentTime; // Calculate latency
-
-        std::ofstream latFile(dir + "packet-latency.dat", std::ios::out | std::ios::app);
-        latFile << uid << " " << latency.GetSeconds() << std::endl; // Log the latency
-        latFile.close();
-
-        packetSentTimestamps.erase(it); // Remove the record to save memory
-    }
-}
 
 // Calculate throughput
 void TraceThroughput(Ptr<FlowMonitor> monitor)
@@ -73,8 +47,25 @@ void TraceCwnd(uint32_t nodeId, uint32_t socketId)
                                   MakeBoundCallback(&CwndTracer, stream));
 }
 
+// Trace RTT
+void RttTracer(Ptr<OutputStreamWrapper> stream, ns3::Time oldval, ns3::Time newval)
+{
+    *stream->GetStream() << Simulator::Now().GetSeconds() << " " << newval / 1000000 << std::endl;
+}
+
+void TraceRtt(uint32_t nodeId, uint32_t socketId)
+{
+    AsciiTraceHelper ascii;
+    Ptr<OutputStreamWrapper> stream = ascii.CreateFileStream(dir + "rtt.dat");
+    Config::ConnectWithoutContext("/NodeList/" + std::to_string(nodeId) +
+                                  "/$ns3::TcpL4Protocol/SocketList/" +
+                                  std::to_string(socketId) + "/RTT",
+                                  MakeBoundCallback(&RttTracer, stream));
+}
+
 int main(int argc, char* argv[])
 {
+    // Naming the output directory using local system time
     time_t rawtime;
     struct tm* timeinfo;
     char buffer[80];
@@ -93,9 +84,9 @@ int main(int argc, char* argv[])
     // Set the resolution for time to nanoseconds
     Time::SetResolution(Time::NS);
 
-    // Enable logging for PacketSink and OnOffApplication
-    LogComponentEnable("PacketSink", LOG_LEVEL_INFO);
-    LogComponentEnable("OnOffApplication", LOG_LEVEL_INFO);
+    // // Enable logging for PacketSink and OnOffApplication
+    // LogComponentEnable("PacketSink", LOG_LEVEL_INFO);
+    // LogComponentEnable("OnOffApplication", LOG_LEVEL_INFO);
 
     // Create nodes for the network
     NodeContainer nodes;
@@ -126,7 +117,7 @@ int main(int argc, char* argv[])
     PacketSinkHelper packetSinkHelper("ns3::TcpSocketFactory", localAddress);
     ApplicationContainer serverApps = packetSinkHelper.Install(nodes.Get(1));
     serverApps.Start(Seconds(0.0));
-    serverApps.Stop(Seconds(10.0));
+    serverApps.Stop(Seconds(20.0));
 
     // OnOffApplication (Sender) on Node 0
     OnOffHelper clientHelper("ns3::TcpSocketFactory", Address());
@@ -139,11 +130,16 @@ int main(int argc, char* argv[])
 
     ApplicationContainer clientApps = clientHelper.Install(nodes.Get(0));
     clientApps.Start(Seconds(0.1));
-    clientApps.Stop(Seconds(10.0));
+    clientApps.Stop(Seconds(20.0));
 
-    // Set up trace callbacks
-    devices.Get(0)->TraceConnectWithoutContext("PhyTxEnd", MakeCallback(&PacketSentCallback));
-    devices.Get(1)->TraceConnectWithoutContext("PhyRxEnd", MakeCallback(&PacketReceivedCallback));
+
+    // Create a new directory to store the output of the program
+    dir = "tcp-results/" + currentTime + "/";
+    std::string dirToSave = "mkdir -p " + dir;
+    if (system(dirToSave.c_str()) == -1)
+    {
+        exit(1);
+    }
 
     // Schedule congestion window tracing
     Simulator::Schedule(Seconds(0.1) + MilliSeconds(1), &TraceCwnd, 0, 0);
@@ -153,16 +149,11 @@ int main(int argc, char* argv[])
     Ptr<FlowMonitor> monitor = flowmon.InstallAll();
     Simulator::Schedule(Seconds(0.2), &TraceThroughput, monitor);
 
-    // Create a new directory to store the output of the program
-    dir = "tcp_newreno_point_results/" + currentTime + "/";
-    std::string dirToSave = "mkdir -p " + dir;
-    if (system(dirToSave.c_str()) == -1)
-    {
-        exit(1);
-    }
+    // Schedule RTT tracing
+    Simulator::Schedule(Seconds(0.1) + MilliSeconds(1), &TraceRtt, 0, 0);
 
     // Run the simulation
-    Simulator::Stop(Seconds(10.1));
+    Simulator::Stop(Seconds(20.1));
     Simulator::Run();
     Simulator::Destroy();
 
