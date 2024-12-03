@@ -19,19 +19,6 @@ import os
 import json
 os.environ['OPENAI_API_KEY'] = ""
 
-# """## 0.2 VLLM [Underconstruction]"""
-
-# # !pip install vllm kaleido python-multipart typing-extensions==4.5.0 torch==2.1.0
-
-# import os
-# os.environ['HF_TOKEN'] = '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'
-
-# from vllm import LLM, SamplingParams
-# # Download Facebook OPT 125M model and load to local variable llm
-# # llm = LLM(model="facebook/opt-125m")
-
-# # !pip install openai --upgrade
-
 
 """# 1. LLM-for-TCP
 - TODOs:
