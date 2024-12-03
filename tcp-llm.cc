@@ -72,6 +72,35 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
         if (tcb->m_lastRtt > trigger_llm_threshold)
         {
             // TODO: Write current parameters to a file for Python script to read
+            std::string filename = "./scratch/history.txt";
+            std::ofstream outputFile(filename);
+
+            if (outputFile.is_open()) 
+            {
+                // Topology
+                outputFile << "topology description: Star topology with 5 nodes, each connected to a central hub.\n";
+                // Base algorithm
+                outputFile << "base algorithm: TCP NewReno\n";
+                // Current cwnd
+                outputFile << "cwnd: " << tcb->m_cWnd << "\n";
+                // Current ssthreshold
+                outputFile << "ssthreshold: " << tcb->m_ssThresh << "\n";
+                // Current RTT
+                outputFile << "RTT: " << tcb->m_lastRtt << "\n";
+                // Current throughput
+                // Read in from file
+                std::string throughput = ReadThroughput();
+                outputFile << "throughput: " << throughput << " kbps\n"; // TODO
+                // Current trigger latency llm threshold
+                outputFile << "current trigger latency llm threshold: " << trigger_llm_threshold << " ms\n";
+                // Close the file
+                outputFile.close();
+                // std::cout << "File written successfully to " << filename << std::endl;
+            }
+            else 
+            {
+                std::cerr << "Error: Unable to open file for writing." << std::endl;
+            }
 
             // TODO: Latency is greater than the threshold. Trigger LLM to generate new parameters
             int res = CallLLM();
@@ -80,11 +109,28 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
                 NS_LOG_ERROR("Failed to execute LLM Python script. Exit code: " << res);
             }
 
-            // TODO: Read in json file and change the corresponding socket parameters here
-            ns3::TracedValue<u_int32_t> newCwnd = 1000*1448.0;
-            ns3::TracedValue<u_int32_t> newSsThresh = 20*1448.0;
+            // Read in txt file and change the corresponding socket parameters here
+            std::unordered_map<std::string, std::string> parsedData = ParseLLMOutput();
+            
+            u_int32_t new_cwnd_int;
+            std::istringstream iss(parsedData["CWND"]);
+            iss >> new_cwnd_int;
+
+            u_int32_t new_ss_int;
+            std::istringstream isss(parsedData["SSThreshold"]);
+            isss >> new_ss_int;
+
+            ns3::Time new_thresh;
+            std::istringstream issss(parsedData["Trigger_latency_llm_threshold"]);
+            issss >> new_thresh;
+
+
+            ns3::TracedValue<u_int32_t> newCwnd = new_cwnd_int;
+            ns3::TracedValue<u_int32_t> newSsThresh = new_ss_int;
+
             tcb->m_cWnd = newCwnd;
             tcb->m_ssThresh = newSsThresh;
+            // trigger_llm_threshold = new_thresh;
         }
     }
 }
@@ -129,11 +175,108 @@ TcpLlm::Fork ()
 int TcpLlm::CallLLM()
 {
     // Define the Python script and output file
-    std::string pythonScript = "python generate.py";
+    std::string pythonScript = "python ./scratch/0_1_prompt_tests.py";
 
     // Execute the Python script and wait for it to complete
     int result = std::system(pythonScript.c_str());
     return result;
 }
+
+std::string TcpLlm::ReadThroughput()
+{
+    // Read the throughput from the file
+    std::string filename = "./llm-results_unique/throughput.dat";
+    std::string throughput;
+
+    std::ifstream inputFile(filename, std::ios::in | std::ios::binary);
+
+    if (inputFile.is_open()) 
+    {
+        std::string lastLine;
+
+        // Seek to the end of the file
+        inputFile.seekg(0, std::ios::end);
+        size_t fileSize = inputFile.tellg();
+
+        // Traverse backwards to find the last newline
+        for (size_t i = 1; i <= fileSize; ++i) 
+        {
+            inputFile.seekg(-i, std::ios::end);
+            char ch;
+            inputFile.get(ch);
+            if (ch == '\n' && i != 1) {
+                // Found the last newline, read the last line
+                std::getline(inputFile, lastLine);
+                break;
+            }
+        }
+
+        // Handle files with a single line (no newline character)
+        if (lastLine.empty()) 
+        {
+            inputFile.clear();
+            inputFile.seekg(0, std::ios::beg);
+            std::getline(inputFile, lastLine);
+        }
+
+        inputFile.close();
+
+        if (!lastLine.empty()) 
+        {
+            size_t spacePos = lastLine.find(' ');
+            if (spacePos != std::string::npos) 
+            {
+                // Only get the throughput value
+                throughput = lastLine.substr(spacePos + 1);
+            }
+        } 
+        else 
+        {
+            std::cout << "File is empty or contains no valid lines." << std::endl;
+        }
+    } 
+    else 
+    {
+        std::cerr << "Error: Unable to open file for reading." << std::endl;
+    }
+
+    return throughput;
+}
+
+
+
+std::unordered_map<std::string, std::string> TcpLlm::ParseLLMOutput()
+{
+    std::string filename = "./scratch/llm_output.txt";
+    std::unordered_map<std::string, std::string> parsedData;
+
+    std::ifstream inputFile(filename);
+
+    if (inputFile.is_open()) 
+    {       
+        std::string line;
+
+        while (std::getline(inputFile, line)) 
+        {
+            // Find the position of the colon
+            size_t colonPos = line.find(':');
+            if (colonPos != std::string::npos) 
+            {
+                std::string key = line.substr(0, colonPos);
+                std::string value = line.substr(colonPos + 2); // Skip ": " (2 characters)
+                
+                parsedData[key] = value;
+            }
+        }
+
+        inputFile.close();
+    } 
+    else 
+    {
+        std::cerr << "Error: Unable to open file for reading." << std::endl;
+    }  
+    return parsedData; 
+}
+
 
 } // namespace ns3
