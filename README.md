@@ -4,6 +4,8 @@ Move tcp-llm.h and tcp-llm.cc into \<your NS3 path\>/ns-allinone-3.37/ns-3.37/sr
 
 Move 0_1_prompts_test.py into \<your NS3 path\>/ns-allinone-3.37/ns-3.37/scratch/
 
+Move tcp_llm_example.cc in to \<your NS3 path\>/ns-allinone-3.37/ns-3.37/scratch/
+
 Replace \<your NS3 path\>/ns-allinone-3.37/ns-3.37/src/internet/CMakeLists.txt with CMakeLists.txt
 
                   cd \<your NS3 path\>/ns-allinone-3.37/ns-3.37/build
