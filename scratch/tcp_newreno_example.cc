@@ -112,6 +112,22 @@ TraceCwnd(uint32_t nodeId, uint32_t socketId)
                                   MakeBoundCallback(&CwndTracer, stream));
 }
 
+// Trace RTT
+void RttTracer(Ptr<OutputStreamWrapper> stream, ns3::Time oldval, ns3::Time newval)
+{
+    *stream->GetStream() << Simulator::Now().GetSeconds() << " " << newval / 1000000 << std::endl;
+}
+
+void TraceRtt(uint32_t nodeId, uint32_t socketId)
+{
+    AsciiTraceHelper ascii;
+    Ptr<OutputStreamWrapper> stream = ascii.CreateFileStream(dir + "rtt.dat");
+    Config::ConnectWithoutContext("/NodeList/" + std::to_string(nodeId) +
+                                  "/$ns3::TcpL4Protocol/SocketList/" +
+                                  std::to_string(socketId) + "/RTT",
+                                  MakeBoundCallback(&RttTracer, stream));
+}
+
 int
 main(int argc, char* argv[])
 {
@@ -263,6 +279,9 @@ main(int argc, char* argv[])
     FlowMonitorHelper flowmon;
     Ptr<FlowMonitor> monitor = flowmon.InstallAll();
     Simulator::Schedule(Seconds(0 + 0.000001), &TraceThroughput, monitor);
+
+    // Schedule RTT tracing
+    Simulator::Schedule(Seconds(0.2) + MilliSeconds(1), &TraceRtt, 0, 0);
 
     Simulator::Stop(stopTime + TimeStep(1));
     Simulator::Run();
