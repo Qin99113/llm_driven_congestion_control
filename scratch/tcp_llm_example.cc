@@ -244,12 +244,14 @@ main(int argc, char* argv[])
     sinkApps.Stop(stopTime);
 
     // Create a new directory to store the output of the program
-    dir = "llm-results/" + currentTime + "/";
+    dir = "llm-results_unique/";
     std::string dirToSave = "mkdir -p " + dir;
     if (system(dirToSave.c_str()) == -1)
     {
         exit(1);
     }
+
+    std::cout << "Topology complete" << std::endl;
 
     // The plotting scripts are provided in the following repository, if needed:
     // https://github.com/mohittahiliani/BBR-Validation/
@@ -267,7 +269,12 @@ main(int argc, char* argv[])
     tch.Uninstall(routers.Get(0)->GetDevice(1));
     QueueDiscContainer qd;
     qd = tch.Install(routers.Get(0)->GetDevice(1));
+    // Check if queueSize.dat exist, if so, truncate it
+    std::ofstream thr1(dir + "/queueSize.dat", std::ios::out | std::ios::trunc);
+    thr1.close();
     Simulator::ScheduleNow(&CheckQueueSize, qd.Get(0));
+
+    std::cout << "Enable PCAP traces" << std::endl;
 
     // Generate PCAP traces if it is enabled
     if (enablePcap)
@@ -282,7 +289,12 @@ main(int argc, char* argv[])
     // Check for dropped packets using Flow Monitor
     FlowMonitorHelper flowmon;
     Ptr<FlowMonitor> monitor = flowmon.InstallAll();
+    // Check if throughput.dat exist, if so, truncate it
+    std::ofstream thr2(dir + "/throughput.dat", std::ios::out | std::ios::trunc);
+    thr2.close();
     Simulator::Schedule(Seconds(0 + 0.000001), &TraceThroughput, monitor);
+
+    std::cout << "Schedule RTT tracing" << std::endl;
 
     // Schedule RTT tracing
     Simulator::Schedule(Seconds(0.2) + MilliSeconds(1), &TraceRtt, 0, 0);
@@ -290,6 +302,8 @@ main(int argc, char* argv[])
     Simulator::Stop(stopTime + TimeStep(1));
     Simulator::Run();
     Simulator::Destroy();
+
+    std::cout << "Simulation finished" << std::endl;
 
     return 0;
 }
