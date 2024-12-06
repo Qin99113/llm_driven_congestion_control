@@ -1,3 +1,9 @@
+// Default Network Topology
+//
+//       10.1.1.0
+// n0 -------------- n1
+//    point-to-point
+//
 #include "ns3/applications-module.h"
 #include "ns3/core-module.h"
 #include "ns3/internet-module.h"
