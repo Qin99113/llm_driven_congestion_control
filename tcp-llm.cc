@@ -60,14 +60,6 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
 
     if (segmentsAcked > 0)
     {
-        // NewReno
-        // double adder =
-        //     static_cast<double>(tcb->m_segmentSize * tcb->m_segmentSize) / tcb->m_cWnd.Get();
-        // adder = std::max(1.0, adder);
-        // tcb->m_cWnd += static_cast<uint32_t>(adder);
-        // NS_LOG_INFO("In CongAvoid, updated to cwnd " << tcb->m_cWnd << " ssthresh "
-        //                                              << tcb->m_ssThresh);
-
         // LLM
         if (tcb->m_lastRtt > trigger_llm_threshold)
         {
@@ -131,6 +123,16 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
             tcb->m_cWnd = newCwnd;
             tcb->m_ssThresh = newSsThresh;
             // trigger_llm_threshold = new_thresh;
+        }
+        else
+        {
+            // Regular TcpNewReno
+            double adder =
+            static_cast<double>(tcb->m_segmentSize * tcb->m_segmentSize) / tcb->m_cWnd.Get();
+            adder = std::max(1.0, adder);
+            tcb->m_cWnd += static_cast<uint32_t>(adder);
+            NS_LOG_INFO("In CongAvoid, updated to cwnd " << tcb->m_cWnd << " ssthresh "
+                                                            << tcb->m_ssThresh);
         }
     }
 }
