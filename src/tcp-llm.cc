@@ -1,6 +1,6 @@
 #include "tcp-llm.h"
 #include "ns3/log.h"
-#include "tcp-socket-state.h"
+#include "ns3/tcp-socket-state.h"
 
 namespace ns3 {
 
@@ -177,7 +177,7 @@ TcpLlm::Fork ()
 int TcpLlm::CallLLM()
 {
     // Define the Python script and output file
-    std::string pythonScript = "python ./scratch/0_1_prompt_tests.py";
+    std::string pythonScript = "python ../0_1_prompt_tests.py";
 
     // Execute the Python script and wait for it to complete
     int result = std::system(pythonScript.c_str());

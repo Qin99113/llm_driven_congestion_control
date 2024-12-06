@@ -28,3 +28,20 @@ queueSize.dat
 rtt.dat
 
 throughput.dat
+
+
+### Installation
+1. Ubuntu 22.04
+2. Install ns3 and libns3 by:
+```angular2html
+sudo apt install ns3
+sudo apt install libns3-dev
+```
+
+### Compilation
+```angular2html
+mkdir build
+cd build
+cmake ..
+make -j 6
+```

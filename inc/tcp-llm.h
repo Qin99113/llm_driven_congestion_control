@@ -1,8 +1,17 @@
+#pragma
 #ifndef TCPLLM_H
 #define TCPLLM_H
 
-#include "tcp-congestion-ops.h"
+#include "ns3/tcp-congestion-ops.h"
+#include "ns3/applications-module.h"
+#include "ns3/core-module.h"
+#include "ns3/flow-monitor-module.h"
+#include "ns3/internet-module.h"
+#include "ns3/network-module.h"
+#include "ns3/point-to-point-module.h"
+#include "ns3/traffic-control-module.h"
 #include <fstream>
+#include <unordered_map>
 
 namespace ns3 {
 

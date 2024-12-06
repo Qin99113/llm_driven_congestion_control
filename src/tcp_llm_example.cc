@@ -226,7 +226,7 @@ main(int argc, char* argv[])
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     // Select sender side port
-    uint16_t port = 50001;
+    uint16_t port = 1001;
 
     // Install application on the sender
     BulkSendHelper source("ns3::TcpSocketFactory", InetSocketAddress(ir1.GetAddress(1), port));
