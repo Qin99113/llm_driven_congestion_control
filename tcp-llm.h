@@ -4,6 +4,7 @@
 #include "tcp-congestion-ops.h"
 #include <fstream>
 
+
 namespace ns3 {
 
 class TcpLlm : public TcpNewReno
@@ -35,6 +36,8 @@ private:
   int CallLLM();
   // Helper function to read throughput.dat
   std::string ReadThroughput();
+  // Store the file path for throughput.dat
+  std::string m_throughputFilePath;
   ns3::Time trigger_llm_threshold;
   std::vector<std::string> last_n_rtt;
   std::unordered_map<std::string, std::string> ParseLLMOutput();

@@ -1,3 +1,11 @@
+## LLM Driven Congestion Control Algorithm 
+
+Baseline Congestion Control Algorithm: TCP Newreno
+
+LLM: OpenAI
+
+## Implementation
+
 Environment Set up version NS-3 37 and other versions of NS3 will also be available.
 
 To run LLM example:

@@ -240,7 +240,7 @@ main(int argc, char* argv[])
     sinkApps.Stop(stopTime);
 
     // Create a new directory to store the output of the program
-    dir = "newreno-results/" + currentTime + "/";
+    dir = "tcp-newreno-results/" + currentTime + "/";
     std::string dirToSave = "mkdir -p " + dir;
     if (system(dirToSave.c_str()) == -1)
     {
@@ -272,7 +272,7 @@ main(int argc, char* argv[])
         {
             exit(1);
         }
-        bottleneckLink.EnablePcapAll(dir + "/pcap/bbr", true);
+        bottleneckLink.EnablePcapAll(dir + "/pcap/newreno", true);
     }
 
     // Check for dropped packets using Flow Monitor

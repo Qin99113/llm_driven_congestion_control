@@ -1,6 +1,10 @@
 #include "tcp-llm.h"
 #include "ns3/log.h"
 #include "tcp-socket-state.h"
+#include "ns3/traced-value.h"
+#include "ns3/string.h"
+#include "ns3/attribute-helper.h"
+
 
 namespace ns3 {
 
@@ -15,6 +19,11 @@ TcpLlm::GetTypeId (void)
     .SetParent<TcpNewReno> ()
     .SetGroupName ("Internet")
     .AddConstructor<TcpLlm> ()
+    .AddAttribute("ThroughputFilePath", 
+                    "The file path for throughput results.",
+                    StringValue("./throughput.dat"), 
+                    MakeStringAccessor(&TcpLlm::m_throughputFilePath), 
+                    MakeStringChecker()); 
   ;
   return tid;
 }
@@ -184,14 +193,15 @@ int TcpLlm::CallLLM()
     return result;
 }
 
+
 std::string TcpLlm::ReadThroughput()
 {
     // Read the throughput from the file
-    std::string filename = "./llm-results_unique/throughput.dat";
+    // std::string filename = "./llm-results_unique/throughput.dat";
+    // std::string throughput;
+    // std::ifstream inputFile(filename, std::ios::in | std::ios::binary);
     std::string throughput;
-
-    std::ifstream inputFile(filename, std::ios::in | std::ios::binary);
-
+    std::ifstream inputFile(m_throughputFilePath, std::ios::in | std::ios::binary);
     if (inputFile.is_open()) 
     {
         std::string lastLine;

@@ -10,13 +10,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Authors: Aarti Nandagiri <aarti.nandagiri@gmail.com>
- *          Vivek Jain <jain.vivek.anand@gmail.com>
- *          Mohit P. Tahiliani <tahiliani@nitk.edu.in>
  */
 
 // This program simulates the following topology:
@@ -25,32 +18,7 @@
 //  Sender * 3 -------------- R1 -------------- R2 -------------- Receiver
 //                  5ms               10ms               5ms
 //
-// The link between R1 and R2 is a bottleneck link with 10 Mbps. All other
-// links are 1000 Mbps.
-//
-// This program runs by default for 100 seconds and creates a new directory
-// called 'bbr-results' in the ns-3 root directory. The program creates one
-// sub-directory called 'pcap' in 'bbr-results' directory (if pcap generation
-// is enabled) and three .dat files.
-//
-// (1) 'pcap' sub-directory contains six PCAP files:
-//     * bbr-0-0.pcap for the interface on Sender
-//     * bbr-1-0.pcap for the interface on Receiver
-//     * bbr-2-0.pcap for the first interface on R1
-//     * bbr-2-1.pcap for the second interface on R1
-//     * bbr-3-0.pcap for the first interface on R2
-//     * bbr-3-1.pcap for the second interface on R2
-// (2) cwnd.dat file contains congestion window trace for the sender node
-// (3) throughput.dat file contains sender side throughput trace
-// (4) queueSize.dat file contains queue length trace from the bottleneck link
-//
-// BBR algorithm enters PROBE_RTT phase in every 10 seconds. The congestion
-// window is fixed to 4 segments in this phase with a goal to achieve a better
-// estimate of minimum RTT (because queue at the bottleneck link tends to drain
-// when the congestion window is reduced to 4 segments).
-//
-// The congestion window and queue occupancy traces output by this program show
-// periodic drops every 10 seconds when BBR algorithm is in PROBE_RTT phase.
+
 
 #include "ns3/applications-module.h"
 #include "ns3/core-module.h"
@@ -141,7 +109,9 @@ TraceThroughput(Ptr<FlowMonitor> monitor)
 
     FlowMonitor::FlowStatsContainer stats = monitor->GetFlowStats();
     Time curTime = Now();
-    std::ofstream thr(dir + "/throughput.dat", std::ios::out | std::ios::app);
+    std::ofstream thr(dir + "/detailed_throughput.dat", std::ios::out | std::ios::app);
+    std::ofstream totalThr(dir + "/throughput.dat", std::ios::out | std::ios::app);
+    double totalThroughput = 0.0; // accumulate throughput
 
     for (const auto& stat : stats)
     {
@@ -150,15 +120,22 @@ TraceThroughput(Ptr<FlowMonitor> monitor)
         if (0 < flowId && flowId < 4)
         {
             const FlowMonitor::FlowStats& flowStats = stat.second;
+            double flowThroughput = 8.0 * (flowStats.txBytes - prevFlowTxBytes[flowId]) /
+                        (1000.0 * 1000.0 * (curTime.GetSeconds() - prevTime.GetSeconds()));
+            // thr << "Flow " << flowId << " at time " << curTime.GetSeconds() << " s: "
+            //     << 8 * (flowStats.txBytes - prevFlowTxBytes[flowId]) /
+            //             (1000 * 1000 * (curTime.GetSeconds() - prevTime.GetSeconds()))
+            //     << " Mbps" << std::endl;
             thr << "Flow " << flowId << " at time " << curTime.GetSeconds() << " s: "
-                << 8 * (flowStats.txBytes - prevFlowTxBytes[flowId]) /
-                        (1000 * 1000 * (curTime.GetSeconds() - prevTime.GetSeconds()))
-                << " Mbps" << std::endl;
-
+                << flowThroughput << " Mbps" << std::endl;
+            totalThroughput += flowThroughput;
             // Update previous values for this flow
             prevFlowTxBytes[flowId] = flowStats.txBytes;
         }
+
     }
+    // 写入总 throughput
+    totalThr << curTime.GetSeconds() << " " << totalThroughput << std::endl;
     prevTime = curTime;
     Simulator::Schedule(Seconds(0.2), &TraceThroughput, monitor);
 }
@@ -219,6 +196,7 @@ main(int argc, char* argv[])
     timeinfo = localtime(&rawtime);
     strftime(buffer, sizeof(buffer), "%d-%m-%Y-%I-%M-%S", timeinfo);
     std::string currentTime(buffer);
+    dir = "tcp_llm_multi_sender_results/";
 
     std::string tcpTypeId = "TcpNewReno";
     std::string queueDisc = "FifoQueueDisc";
@@ -242,7 +220,7 @@ main(int argc, char* argv[])
     // std::string tcpVariant = "TcpNewReno"; 
     tcpVariant = std::string ("ns3::") + tcpVariant;
     Config::SetDefault ("ns3::TcpL4Protocol::SocketType", TypeIdValue (TypeId::LookupByName (tcpVariant)));
-
+    Config::SetDefault("ns3::TcpLlm::ThroughputFilePath", StringValue("./"+dir+"throughput.dat"));
     // Config::SetDefault("ns3::TcpL4Protocol::SocketType", StringValue("ns3::" + tcpTypeId));
     Config::SetDefault("ns3::TcpSocket::SndBufSize", UintegerValue(4194304));
     Config::SetDefault("ns3::TcpSocket::RcvBufSize", UintegerValue(6291456));
@@ -309,6 +287,7 @@ main(int argc, char* argv[])
     internet.Install(receiver);
     internet.Install(routers);
 
+
     // Configure the root queue discipline
     TrafficControlHelper tch;
     tch.SetRootQueueDisc(queueDisc);
@@ -368,7 +347,6 @@ main(int argc, char* argv[])
     }
 
     // Create a new directory to store the output of the program
-    dir = "multi_sender_results/";
     std::string dirToSave = "mkdir -p " + dir;
     if (system(dirToSave.c_str()) == -1)
     {
@@ -407,7 +385,7 @@ main(int argc, char* argv[])
         {
             exit(1);
         }
-        bottleneckLink.EnablePcapAll(dir + "/pcap/bbr", true);
+        bottleneckLink.EnablePcapAll(dir + "/pcap/newreno", true);
     }
 
     // Check for dropped packets using Flow Monitor
@@ -416,6 +394,9 @@ main(int argc, char* argv[])
     // Check if throughput.dat exist, if so, truncate it
     std::ofstream thr2(dir + "/throughput.dat", std::ios::out | std::ios::trunc);
     thr2.close();
+    std::ofstream thr3(dir + "/detailed_throughput.dat", std::ios::out | std::ios::trunc);
+    thr3.close();
+
 
     // Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier>(flowmon.GetClassifier());
 

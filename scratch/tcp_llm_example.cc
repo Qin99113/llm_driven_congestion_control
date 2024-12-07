@@ -44,13 +44,6 @@
 // (3) throughput.dat file contains sender side throughput trace
 // (4) queueSize.dat file contains queue length trace from the bottleneck link
 //
-// BBR algorithm enters PROBE_RTT phase in every 10 seconds. The congestion
-// window is fixed to 4 segments in this phase with a goal to achieve a better
-// estimate of minimum RTT (because queue at the bottleneck link tends to drain
-// when the congestion window is reduced to 4 segments).
-//
-// The congestion window and queue occupancy traces output by this program show
-// periodic drops every 10 seconds when BBR algorithm is in PROBE_RTT phase.
 
 #include "ns3/applications-module.h"
 #include "ns3/core-module.h"
@@ -139,6 +132,7 @@ main(int argc, char* argv[])
     timeinfo = localtime(&rawtime);
     strftime(buffer, sizeof(buffer), "%d-%m-%Y-%I-%M-%S", timeinfo);
     std::string currentTime(buffer);
+    dir = "tcp_llm_one_sender_results/";
 
     std::string tcpTypeId = "TcpNewReno";
     std::string queueDisc = "FifoQueueDisc";
@@ -161,7 +155,7 @@ main(int argc, char* argv[])
     std::string tcpVariant = "TcpLlm"; 
     tcpVariant = std::string ("ns3::") + tcpVariant;
     Config::SetDefault ("ns3::TcpL4Protocol::SocketType", TypeIdValue (TypeId::LookupByName (tcpVariant)));
-
+    Config::SetDefault("ns3::TcpLlm::ThroughputFilePath", StringValue("./"+dir+"throughput.dat"));
     // Config::SetDefault("ns3::TcpL4Protocol::SocketType", StringValue("ns3::" + tcpTypeId));
     Config::SetDefault("ns3::TcpSocket::SndBufSize", UintegerValue(4194304));
     Config::SetDefault("ns3::TcpSocket::RcvBufSize", UintegerValue(6291456));
@@ -244,7 +238,7 @@ main(int argc, char* argv[])
     sinkApps.Stop(stopTime);
 
     // Create a new directory to store the output of the program
-    dir = "llm-results_unique/";
+    
     std::string dirToSave = "mkdir -p " + dir;
     if (system(dirToSave.c_str()) == -1)
     {
@@ -283,7 +277,7 @@ main(int argc, char* argv[])
         {
             exit(1);
         }
-        bottleneckLink.EnablePcapAll(dir + "/pcap/bbr", true);
+        bottleneckLink.EnablePcapAll(dir + "/pcap/newreno", true);
     }
 
     // Check for dropped packets using Flow Monitor
