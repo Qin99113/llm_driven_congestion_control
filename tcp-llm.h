@@ -2,6 +2,7 @@
 #define TCPLLM_H
 
 #include "tcp-congestion-ops.h"
+#include "ns3/core-module.h"
 #include <fstream>
 
 
@@ -41,6 +42,8 @@ private:
   ns3::Time trigger_llm_threshold;
   std::vector<std::string> last_n_rtt;
   std::unordered_map<std::string, std::string> ParseLLMOutput();
+  int64_t last_trigger_time;
+  int64_t wait_threshold;
 
 };
 

@@ -30,7 +30,9 @@ TcpLlm::GetTypeId (void)
 
 TcpLlm::TcpLlm (void) 
 : TcpNewReno (),
-  trigger_llm_threshold(Seconds(0.1))
+  trigger_llm_threshold(Seconds(0.1)),
+  last_trigger_time(0),
+  wait_threshold(2000000000) // The unit is nano second, so 2 seconds here
 {
   NS_LOG_FUNCTION (this);
 }
@@ -70,9 +72,11 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
     if (segmentsAcked > 0)
     {
         // LLM
-        if (tcb->m_lastRtt > trigger_llm_threshold)
+        if (tcb->m_lastRtt > trigger_llm_threshold && 
+            (Simulator::Now().GetNanoSeconds() - last_trigger_time) > wait_threshold)
         {
-            // TODO: Write current parameters to a file for Python script to read
+            // std::cout << "RTT right now: " << tcb->m_lastRtt << std::endl;
+            // std::cout << "Trigger latency llm threshold: " << trigger_llm_threshold << std::endl;
             std::string filename = "./scratch/history.txt";
             std::ofstream outputFile(filename);
 
@@ -104,6 +108,8 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
             }
 
             // TODO: Latency is greater than the threshold. Trigger LLM to generate new parameters
+            last_trigger_time = Simulator::Now().GetNanoSeconds();
+            // std::cout << "Triggering LLM time " << last_trigger_time / 1000000000.0 << std::endl;
             int res = CallLLM();
             if (res != 0)
             {
