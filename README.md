@@ -34,6 +34,12 @@ Replace \<your NS3 path\>/ns-allinone-3.37/ns-3.37/src/internet/CMakeLists.txt w
                   
                   ./ns3 run scratch/tcp_llm_example.cc
 
+/plot folder, /newreno folder, plot_both.py, plot.py should be moved to /ns-3.37
+
+### Experiment
+the newreno's 60s results has been saved in newreno folder;
+use plot.py to plot the 4 metrics for our method or baseline newreno, the figures will be saved in the plot folder, the average values of the 4 metrics will be printed out;
+use plot_both.py to plot the 4 metrics for both method together, the figures will be saved in the plot folder;
 
 4 output files will be stored at \<your NS3 path\>/ns-allinone-3.37/ns-3.37/<results path defined>.
 

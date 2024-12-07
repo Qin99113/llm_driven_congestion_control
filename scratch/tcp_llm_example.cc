@@ -139,7 +139,7 @@ main(int argc, char* argv[])
     uint32_t delAckCount = 2;
     bool bql = true;
     bool enablePcap = false;
-    Time stopTime = Seconds(20);
+    Time stopTime = Seconds(60);
 
     CommandLine cmd(__FILE__);
     cmd.AddValue("tcpTypeId", "Transport protocol to use: TcpNewReno, TcpBbr", tcpTypeId);
