@@ -9,7 +9,7 @@ rtt_baseline = pd.read_csv("newreno/rtt.dat", delim_whitespace=True, header=None
 throughput_baseline = pd.read_csv("newreno/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
 
 cwnd_method = pd.read_csv("tcp_llm_one_sender_results/cwnd.dat", delim_whitespace=True, header=None, names=["Time", "CWND"])
-cwnd_method = pd.read_csv("tcp_llm_one_sender_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
+queue_size_method = pd.read_csv("tcp_llm_one_sender_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
 rtt_method = pd.read_csv("tcp_llm_one_sender_results/rtt.dat", delim_whitespace=True, header=None, names=["Time", "RTT"])
 throughput_method = pd.read_csv("tcp_llm_one_sender_results/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
 

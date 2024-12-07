@@ -41,6 +41,8 @@ the newreno's 60s results has been saved in newreno folder;
 use plot.py to plot the 4 metrics for our method or baseline newreno, the figures will be saved in the plot folder, the average values of the 4 metrics will be printed out;
 use plot_both.py to plot the 4 metrics for both method together, the figures will be saved in the plot folder;
 
+the /one_one_result has the figures for the 1-1-result
+
 4 output files will be stored at \<your NS3 path\>/ns-allinone-3.37/ns-3.37/<results path defined>.
 
 cwnd.dat
