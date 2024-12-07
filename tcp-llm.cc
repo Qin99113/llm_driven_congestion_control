@@ -115,6 +115,8 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
             {
                 NS_LOG_ERROR("Failed to execute LLM Python script. Exit code: " << res);
             }
+            int64_t llm_finish_time = Simulator::Now().GetNanoSeconds() - last_trigger_time;
+            wait_threshold = llm_finish_time + 2000000000; // 2 seconds after LLM finish time
 
             // Read in txt file and change the corresponding socket parameters here
             std::unordered_map<std::string, std::string> parsedData = ParseLLMOutput();
