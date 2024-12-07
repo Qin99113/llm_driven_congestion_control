@@ -11,7 +11,6 @@ set(OLD_GLOB
   "/Users/shiyuanluo/Desktop/llm_driven_congestion_control/scratch/tcp_llm_multi_compete.cc"
   "/Users/shiyuanluo/Desktop/llm_driven_congestion_control/scratch/tcp_llm_multi_se_rec.cc"
   "/Users/shiyuanluo/Desktop/llm_driven_congestion_control/scratch/tcp_llm_multi_sender.cc"
-  "/Users/shiyuanluo/Desktop/llm_driven_congestion_control/scratch/tcp_newreno_example.cc"
   "/Users/shiyuanluo/Desktop/llm_driven_congestion_control/scratch/tcp_newreno_latency.cc"
   "/Users/shiyuanluo/Desktop/llm_driven_congestion_control/scratch/tcp_newreno_point.cc"
   )
