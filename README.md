@@ -26,7 +26,7 @@
      - `tcp_llm_multi_sender.cc` → `<your NS3 path>/ns-allinone-3.37/ns-3.37/scratch/`
      - `tcp_llm_multi_compete.cc` → `<your NS3 path>/ns-allinone-3.37/ns-3.37/scratch/`
      - `tcp_llm_multi_se_rec.cc` → `<your NS3 path>/ns-allinone-3.37/ns-3.37/scratch/`
-   - **Plotting Scripts and Folders:**
+   - **Plotting Scripts and Result Folders:**
      - Move `tcp_llm_results` folder to `<your NS3 path>/ns-allinone-3.37/ns-3.37/`.
      - Move `tcp_newreno_results` folder to `<your NS3 path>/ns-allinone-3.37/ns-3.37/`.
      - Move `/plot` folder, `/plot_comparision` folder to `<your NS3 path>/ns-allinone-3.37/ns-3.37/`.
