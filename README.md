@@ -52,7 +52,9 @@
    - `tcp_llm_multi_se_rec.cc`: This is an example to show how to use the LLM algorithm with multiple senders and multiple receivers and results will be collected in the folder `tcp_llm_multi_se_rec_results`.
    - **Note:** You can change the `TcpVariant` parameter in the code to either `TcpNewReno` or `TcpLlm` to run the experiment for both variants.
    - **Note:** You can change the `stopTime` parameter in the code to run the experiment for different simulation times.
+   ```bash
    ./ns3 run scratch/tcp_llm_example.cc
+   ```
    - **Note:** You need to store the result folders in a separate directory for each experiment due to overwriting of results.
 
 ### Results
@@ -139,6 +141,9 @@ Each output file contains data for specific metrics:
    - Example: `Config::SetDefault("ns3::DropTailQueue<Packet>::MaxSize", QueueSizeValue(QueueSize("BDP packets")));`
    - Verify that the bottleneck link is correctly connected to the queue.
    - Example: Number 1 means the router connects to the bottleneck link.
+```
                 tch.Uninstall(routers.Get(0)->GetDevice(1));
                 QueueDiscContainer qd;
                 qd = tch.Install(routers.Get(0)->GetDevice(1));
+
+```
