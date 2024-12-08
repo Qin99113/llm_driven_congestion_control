@@ -2,15 +2,27 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.ticker import MaxNLocator
 
+# tcp_llm_results
+cwnd0 = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_receiver_results/cwnd_0.dat", delim_whitespace=True, header=None, names=["Time", "CWND0"])
+cwnd1 = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_receiver_results/cwnd_1.dat", delim_whitespace=True, header=None, names=["Time", "CWND1"])
+cwnd2 = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_receiver_results/cwnd_2.dat", delim_whitespace=True, header=None, names=["Time", "CWND2"])
+queue_size = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_receiver_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
+rtt0 = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_receiver_results/rtt_0.dat", delim_whitespace=True, header=None, names=["Time", "RTT0"])
+rtt1 = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_receiver_results/rtt_1.dat", delim_whitespace=True, header=None, names=["Time", "RTT1"])
+rtt2 = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_receiver_results/rtt_2.dat", delim_whitespace=True, header=None, names=["Time", "RTT2"])
+throughput = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_receiver_results/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
 
-cwnd0 = pd.read_csv("2min_best_tcp_llm_multi_sender_receiver_results/cwnd_0.dat", delim_whitespace=True, header=None, names=["Time", "CWND0"])
-cwnd1 = pd.read_csv("2min_best_tcp_llm_multi_sender_receiver_results/cwnd_1.dat", delim_whitespace=True, header=None, names=["Time", "CWND1"])
-cwnd2 = pd.read_csv("2min_best_tcp_llm_multi_sender_receiver_results/cwnd_2.dat", delim_whitespace=True, header=None, names=["Time", "CWND2"])
-queue_size = pd.read_csv("2min_best_tcp_llm_multi_sender_receiver_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
-rtt0 = pd.read_csv("2min_best_tcp_llm_multi_sender_receiver_results/rtt_0.dat", delim_whitespace=True, header=None, names=["Time", "RTT0"])
-rtt1 = pd.read_csv("2min_best_tcp_llm_multi_sender_receiver_results/rtt_1.dat", delim_whitespace=True, header=None, names=["Time", "RTT1"])
-rtt2 = pd.read_csv("2min_best_tcp_llm_multi_sender_receiver_results/rtt_2.dat", delim_whitespace=True, header=None, names=["Time", "RTT2"])
-throughput = pd.read_csv("2min_best_tcp_llm_multi_sender_receiver_results/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
+
+# # tcp_newreno_results
+# cwnd0 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_receiver_results/cwnd_0.dat", delim_whitespace=True, header=None, names=["Time", "CWND0"])
+# cwnd1 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_receiver_results/cwnd_1.dat", delim_whitespace=True, header=None, names=["Time", "CWND1"])
+# cwnd2 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_receiver_results/cwnd_2.dat", delim_whitespace=True, header=None, names=["Time", "CWND2"])
+# queue_size = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_receiver_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
+# rtt0 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_receiver_results/rtt_0.dat", delim_whitespace=True, header=None, names=["Time", "RTT0"])
+# rtt1 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_receiver_results/rtt_1.dat", delim_whitespace=True, header=None, names=["Time", "RTT1"])
+# rtt2 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_receiver_results/rtt_2.dat", delim_whitespace=True, header=None, names=["Time", "RTT2"])
+# throughput = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_receiver_results/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
+
 
 # Calculate average values
 cwnd_avg0 = cwnd0["CWND0"].mean()
@@ -48,6 +60,7 @@ plt.ylabel("CWND")
 plt.legend()
 plt.ylim(bottom=0)
 plt.savefig('plot/fairness/llm/cwnd.png')
+# plt.savefig('plot/fairness/newreno/cwnd.png')
 plt.show()
 
 plt.figure(figsize=(10, 6))
@@ -58,6 +71,7 @@ plt.ylabel("Queue Size")
 plt.legend()
 plt.ylim(bottom=0)
 plt.savefig('plot/fairness/llm/queue.png')
+# plt.savefig('plot/fairness/newreno/queue.png')
 plt.show()
 
 plt.figure(figsize=(10, 6))
@@ -70,6 +84,7 @@ plt.ylabel("RTT (ms)")
 plt.legend()
 plt.ylim(bottom=0)
 plt.savefig('plot/fairness/llm/rtt.png')
+# plt.savefig('plot/fairness/newreno/rtt.png')
 plt.show()
 
 plt.figure(figsize=(10, 6))
@@ -82,4 +97,5 @@ plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, prune='both'))  # Sh
 plt.legend()
 plt.ylim(bottom=0)
 plt.savefig('plot/fairness/llm/throughput.png')
+# plt.savefig('plot/fairness/newreno/throughput.png')
 plt.show()

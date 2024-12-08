@@ -219,8 +219,8 @@ main(int argc, char* argv[])
 
     queueDisc = std::string("ns3::") + queueDisc;
 
-    // std::string tcpVariant = "TcpLlm"; 
-    std::string tcpVariant = "TcpNewReno"; 
+    std::string tcpVariant = "TcpLlm"; 
+    // std::string tcpVariant = "TcpNewReno"; 
     tcpVariant = std::string ("ns3::") + tcpVariant;
     Config::SetDefault ("ns3::TcpL4Protocol::SocketType", TypeIdValue (TypeId::LookupByName (tcpVariant)));
     Config::SetDefault("ns3::TcpLlm::ThroughputFilePath", StringValue("./"+dir+"throughput.dat"));

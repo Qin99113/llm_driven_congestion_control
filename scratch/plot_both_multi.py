@@ -3,15 +3,15 @@ import pandas as pd
 from matplotlib.ticker import MaxNLocator
 
 
-cwnd_baseline = pd.read_csv("newreno/tcp_llm_multi_sender_results/cwnd_1.dat", delim_whitespace=True, header=None, names=["Time", "CWND"])
-queue_size_baseline = pd.read_csv("newreno/tcp_llm_multi_sender_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
-rtt_baseline = pd.read_csv("newreno/tcp_llm_multi_sender_results/rtt_1.dat", delim_whitespace=True, header=None, names=["Time", "RTT"])
-throughput_baseline = pd.read_csv("newreno/tcp_llm_multi_sender_results/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
+cwnd_baseline = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_results/cwnd_1.dat", delim_whitespace=True, header=None, names=["Time", "CWND"])
+queue_size_baseline = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
+rtt_baseline = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_results/rtt_1.dat", delim_whitespace=True, header=None, names=["Time", "RTT"])
+throughput_baseline = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_results/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
 
-cwnd_method = pd.read_csv("2min_best_tcp_llm_multi_sender_results/cwnd_1.dat", delim_whitespace=True, header=None, names=["Time", "CWND"])
-queue_size_method = pd.read_csv("2min_best_tcp_llm_multi_sender_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
-rtt_method = pd.read_csv("2min_best_tcp_llm_multi_sender_results/rtt_1.dat", delim_whitespace=True, header=None, names=["Time", "RTT"])
-throughput_method = pd.read_csv("2min_best_tcp_llm_multi_sender_results/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
+cwnd_method = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_results/cwnd_1.dat", delim_whitespace=True, header=None, names=["Time", "CWND"])
+queue_size_method = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_results/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
+rtt_method = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_results/rtt_1.dat", delim_whitespace=True, header=None, names=["Time", "RTT"])
+throughput_method = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_results/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
 
 
 
@@ -39,7 +39,7 @@ plot_metric("QueueSize", queue_size_method, queue_size_baseline, "Queue Size", "
 # Plot RTT (convert RTT to numeric if necessary)
 rtt_method["RTT"] = rtt_method["RTT"].str.replace("ns", "").astype(float)
 rtt_baseline["RTT"] = rtt_baseline["RTT"].str.replace("ns", "").astype(float)
-plot_metric("RTT", rtt_method, rtt_baseline, "RTT (ns)", "plot_comparison/multi_sender/rtt_comparison.png")
+plot_metric("RTT", rtt_method, rtt_baseline, "RTT (ms)", "plot_comparison/multi_sender/rtt_comparison.png")
 
 # Plot Throughput
 plot_metric("Throughput", throughput_method, throughput_baseline, "Throughput", "plot_comparison/multi_sender/throughput_comparison.png")

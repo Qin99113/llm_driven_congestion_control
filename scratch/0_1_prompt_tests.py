@@ -29,22 +29,22 @@ os.environ['OPENAI_API_KEY'] = ""
 """
 
 # shiyuan modified
-# # One to one topo
-# few_shot_data = [
-#     {
-#         "input": "Current network topology with a sender, R1, R2, and a receiver, where: Link from the sender to R1 has a bandwidth of 1000 Mbps with a delay of 5 ms; Link between R1 and R2 (the bottleneck) has a bandwidth of 10 Mbps and a delay of 10 ms; Link from R2 to the receiver has a bandwidth of 1000 Mbps with a delay of 5 ms. The current TCP NewReno parameters overtime are: CWND values: [104256, 224440]; Queuesizes are: [33, 98]; rtt: [+55ns, +188ns]; throughput: [10.08, 14.94]. Output the optimal congestion control for the next time step.",
-#         # "input": "Current network topology with a sender, R1, R2, and a receiver, where: \n Sender to R1: Bandwidth 1000 Mbps, Delay 5ms \n R1 to R2(bottleneck link): Bandwidth 100 Mbps, Delay 10ms \n R2 to receiver: Bandwidth 1000 Mbps, Delay 5ms. The current TCP NewReno parameters overtime are: CWND values: [104256, 224440]; Queuesizes are: [33, 98]; rtt: [+55ns, +188ns]; throughput: [10.08, 14.94]. Output the optimal congestion control for the next time step.",
-#         "output": "['159280', '46', '+150ns', '9.54']"
-#     },
-#     # {
-#     #     "input": "Current network topology with a sender, R1, R2, and a receiver, where: Link from the sender to R1 has a bandwidth of 1000 Mbps with a delay of 5 ms; Link between R1 and R2 (the bottleneck) has a bandwidth of 10 Mbps and a delay of 10 ms; Link from R2 to the receiver has a bandwidth of 1000 Mbps with a delay of 5 ms. The current TCP NewReno parameters overtime are: CWND values: [156847, 162176, 181550]; Queuesizes are: [72, 75, 90]; rtt: [+129ns, +134ns, +149ns]; throughput: [10.02, 9.96, 10.02]. Output the optimal congestion control for the next time step.",
-#     #     "output": "['190687', '95', '+158ns', '9.96']"
-#     # },
-#     # {
-#     #     "input": "Current network topology with a sender, R1, R2, and a receiver, where: Link from the sender to R1 has a bandwidth of 1000 Mbps with a delay of 5 ms; Link between R1 and R2 (the bottleneck) has a bandwidth of 10 Mbps and a delay of 10 ms; Link from R2 to the receiver has a bandwidth of 1000 Mbps with a delay of 5 ms. The current TCP NewReno parameters overtime are: CWND values: [190498, 194842]; Queuesizes are: [95, 98]; rtt: [+158ns, +161ns]; throughput: [9.96, 10.02]. Output the optimal congestion control for the next time step.",
-#     #     "output": "['98464', '33', '+81ns', '10.08']"
-#     # }
-# ]
+# One to one topo
+few_shot_data = [
+    {
+        "input": "Current network topology with a sender, R1, R2, and a receiver, where: Link from the sender to R1 has a bandwidth of 1000 Mbps with a delay of 5 ms; Link between R1 and R2 (the bottleneck) has a bandwidth of 10 Mbps and a delay of 10 ms; Link from R2 to the receiver has a bandwidth of 1000 Mbps with a delay of 5 ms. The current TCP NewReno parameters overtime are: CWND values: [104256, 224440]; Queuesizes are: [33, 98]; rtt: [+55ns, +188ns]; throughput: [10.08, 14.94]. Output the optimal congestion control for the next time step.",
+        # "input": "Current network topology with a sender, R1, R2, and a receiver, where: \n Sender to R1: Bandwidth 1000 Mbps, Delay 5ms \n R1 to R2(bottleneck link): Bandwidth 100 Mbps, Delay 10ms \n R2 to receiver: Bandwidth 1000 Mbps, Delay 5ms. The current TCP NewReno parameters overtime are: CWND values: [104256, 224440]; Queuesizes are: [33, 98]; rtt: [+55ns, +188ns]; throughput: [10.08, 14.94]. Output the optimal congestion control for the next time step.",
+        "output": "['159280', '46', '+150ns', '9.54']"
+    },
+    # {
+    #     "input": "Current network topology with a sender, R1, R2, and a receiver, where: Link from the sender to R1 has a bandwidth of 1000 Mbps with a delay of 5 ms; Link between R1 and R2 (the bottleneck) has a bandwidth of 10 Mbps and a delay of 10 ms; Link from R2 to the receiver has a bandwidth of 1000 Mbps with a delay of 5 ms. The current TCP NewReno parameters overtime are: CWND values: [156847, 162176, 181550]; Queuesizes are: [72, 75, 90]; rtt: [+129ns, +134ns, +149ns]; throughput: [10.02, 9.96, 10.02]. Output the optimal congestion control for the next time step.",
+    #     "output": "['190687', '95', '+158ns', '9.96']"
+    # },
+    # {
+    #     "input": "Current network topology with a sender, R1, R2, and a receiver, where: Link from the sender to R1 has a bandwidth of 1000 Mbps with a delay of 5 ms; Link between R1 and R2 (the bottleneck) has a bandwidth of 10 Mbps and a delay of 10 ms; Link from R2 to the receiver has a bandwidth of 1000 Mbps with a delay of 5 ms. The current TCP NewReno parameters overtime are: CWND values: [190498, 194842]; Queuesizes are: [95, 98]; rtt: [+158ns, +161ns]; throughput: [9.96, 10.02]. Output the optimal congestion control for the next time step.",
+    #     "output": "['98464', '33', '+81ns', '10.08']"
+    # }
+]
 
 # # Many to many topo 1
 # few_shot_data = [
@@ -62,13 +62,13 @@ os.environ['OPENAI_API_KEY'] = ""
 #     },
 # ]
 
-# Many to many topo 3 # Fairness
-few_shot_data = [
-    {
-        "input": "Current network topology with three senders S0 S1 S2, two routers R1 R2, and three receivers RE0 RE1 RE2, where: Links from all senders to R1 have a bandwidth of 1000 Mbps with a delay of 5 ms respectivaly; Link between R1 and R2 (the bottleneck) has a bandwidth of 15 Mbps and a delay of 10 ms; Link from R2 to all three receivers have a bandwidth of 1000 Mbps with a delay of 5 ms respectively. The current TCP NewReno parameters overtime are: CWND values: [104256, 224440]; Queuesizes are: [33, 98]; rtt: [+55ns, +188ns]; throughput: [10.08, 14.94]. Output the optimal congestion control for the next time step.",
-        "output": "['159280', '46', '+150ns', '9.54']"
-    },
-]
+# # Many to many topo 3 # Fairness
+# few_shot_data = [
+#     {
+#         "input": "Current network topology with three senders S0 S1 S2, two routers R1 R2, and three receivers RE0 RE1 RE2, where: Links from all senders to R1 have a bandwidth of 1000 Mbps with a delay of 5 ms respectivaly; Link between R1 and R2 (the bottleneck) has a bandwidth of 15 Mbps and a delay of 10 ms; Link from R2 to all three receivers have a bandwidth of 1000 Mbps with a delay of 5 ms respectively. The current TCP NewReno parameters overtime are: CWND values: [104256, 224440]; Queuesizes are: [33, 98]; rtt: [+55ns, +188ns]; throughput: [10.08, 14.94]. Output the optimal congestion control for the next time step.",
+#         "output": "['159280', '46', '+150ns', '9.54']"
+#     },
+# ]
 
 naive_prompt = '''
 Imaging you are an expert in network congestion control. You are given the following situation:

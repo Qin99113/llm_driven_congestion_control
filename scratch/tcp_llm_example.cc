@@ -67,7 +67,7 @@ TraceThroughput(Ptr<FlowMonitor> monitor)
     auto itr = stats.begin();
     Time curTime = Now();
     std::ofstream thr(dir + "/throughput.dat", std::ios::out | std::ios::app);
-    thr << curTime << " "
+    thr << curTime.GetSeconds() << " "
         << 8 * (itr->second.txBytes - prev) /
                (1000 * 1000 * (curTime.GetSeconds() - prevTime.GetSeconds()))
         << std::endl;
@@ -139,7 +139,7 @@ main(int argc, char* argv[])
     uint32_t delAckCount = 2;
     bool bql = true;
     bool enablePcap = false;
-    Time stopTime = Seconds(120);
+    Time stopTime = Seconds(3600);
 
     CommandLine cmd(__FILE__);
     cmd.AddValue("tcpTypeId", "Transport protocol to use: TcpNewReno, TcpBbr", tcpTypeId);
@@ -152,7 +152,8 @@ main(int argc, char* argv[])
 
     queueDisc = std::string("ns3::") + queueDisc;
 
-    std::string tcpVariant = "TcpLlm"; 
+    // std::string tcpVariant = "TcpLlm"; 
+    std::string tcpVariant = "TcpNewReno";
     tcpVariant = std::string ("ns3::") + tcpVariant;
     Config::SetDefault ("ns3::TcpL4Protocol::SocketType", TypeIdValue (TypeId::LookupByName (tcpVariant)));
     Config::SetDefault("ns3::TcpLlm::ThroughputFilePath", StringValue("./"+dir+"throughput.dat"));

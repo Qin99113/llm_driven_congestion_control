@@ -1,4 +1,4 @@
-CWND: 108000
-Trigger_latency_llm_threshold: +1.01121e+08ns
-SSThreshold: 51404
+CWND: 160000
+Trigger_latency_llm_threshold: +1.25e+08ns
+SSThreshold: 100000
 
