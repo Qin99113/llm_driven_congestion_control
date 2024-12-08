@@ -44,6 +44,7 @@ private:
   std::unordered_map<std::string, std::string> ParseLLMOutput();
   int64_t last_trigger_time;
   int64_t wait_threshold;
+  std::string topology_description;
 
 };
 

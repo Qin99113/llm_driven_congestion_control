@@ -23,8 +23,12 @@ TcpLlm::GetTypeId (void)
                     "The file path for throughput results.",
                     StringValue("./throughput.dat"), 
                     MakeStringAccessor(&TcpLlm::m_throughputFilePath), 
+                    MakeStringChecker())
+    .AddAttribute("TopolgyDescription", 
+                    "The description of the topology.",
+                    StringValue("Current network topology with a sender, R1, R2, and a receiver, where: Link from the sender to R1 has a bandwidth of 1000 Mbps with a delay of 5 ms; Link between R1 and R2 (the bottleneck) has a bandwidth of 10 Mbps and a delay of 10 ms; Link from R2 to the receiver has a bandwidth of 1000 Mbps with a delay of 5 ms."), 
+                    MakeStringAccessor(&TcpLlm::topology_description), 
                     MakeStringChecker()); 
-  ;
   return tid;
 }
 
@@ -83,7 +87,7 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
             if (outputFile.is_open()) 
             {
                 // Topology
-                outputFile << "topology description: Star topology with 5 nodes, each connected to a central hub.\n";
+                outputFile << topology_description << "\n";
                 // Base algorithm
                 outputFile << "base algorithm: TCP NewReno\n";
                 // Current cwnd
@@ -116,7 +120,7 @@ TcpLlm::CongestionAvoidance(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
                 NS_LOG_ERROR("Failed to execute LLM Python script. Exit code: " << res);
             }
             int64_t llm_finish_time = Simulator::Now().GetNanoSeconds() - last_trigger_time;
-            wait_threshold = llm_finish_time + 2000000000; // 2 seconds after LLM finish time
+            wait_threshold = llm_finish_time + 2000000000; // 2 seconds after LLM finish
 
             // Read in txt file and change the corresponding socket parameters here
             std::unordered_map<std::string, std::string> parsedData = ParseLLMOutput();
