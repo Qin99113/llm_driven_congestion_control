@@ -37,11 +37,16 @@ Replace \<your NS3 path\>/ns-allinone-3.37/ns-3.37/src/internet/CMakeLists.txt w
 /plot folder, /newreno folder, plot_both.py, plot.py should be moved to /ns-3.37
 
 ### Experiment
-the newreno's 60s results has been saved in newreno folder;
-use plot.py to plot the 4 metrics for our method or baseline newreno, the figures will be saved in the plot folder, the average values of the 4 metrics will be printed out;
-use plot_both.py to plot the 4 metrics for both method together, the figures will be saved in the plot folder;
+YOU CAN RUN THE EXPERIMENTS BY CHANGING THE PATHS IN THE CODE AND RUNNING THE EXPERIMENTS IN THE FOLLOWING ORDER:
 
-the /one_one_result has the figures for the 1-1-result
+tcp_llm_example.cc: This is a simple example to show how to use the LLM algorithm and results will be collected in the folder tcp_llm_one_sender_results.
+<Note you can change Tcpvariant to either TcpNewReno or TcpLlm and run the experiment for both variants>
+
+
+### Results
+
+1. tcp_newreno_results and tcp_llm_results folders are results collected from 2min simulations with one sender and one receiver, muti-senders and one receiver, multi-senders and multi-receivers.
+2. We also conduct one additional experiment in one hour simulation to compare the performance of the two methods, you can find the results in the folder named begin wtih "1h_".
 
 4 output files will be stored at \<your NS3 path\>/ns-allinone-3.37/ns-3.37/<results path defined>.
 
@@ -52,3 +57,11 @@ queueSize.dat
 rtt.dat
 
 throughput.dat
+
+Use plot_<>.py to plot the 4 metrics for our llm-driven method or baseline newreno, the figures will be saved in the plot folder, the average values of the 4 metrics will be printed out;
+
+Use plot_both_<>.py to plot the 4 metrics for both method together, the figures will be saved in the plot_comparision folder;
+
+                  python  scratch/<plot files you are ready to run>
+
+
