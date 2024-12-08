@@ -22,9 +22,9 @@ def plot_metric(metric_name, method_data, baseline_data, ylabel, output_file):
     plt.title(f"{metric_name} Comparison Over Time")
     plt.xlabel("Time")
     plt.ylabel(ylabel)
-    plt.legend()
+    plt.legend(loc='upper right')
     plt.xlim(0, 60)
-    plt.ylim(0, 200)
+    # plt.ylim(0, 200)
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, prune='both'))  # Show integer labels only, prune unused edges
     plt.savefig(output_file)
     plt.show()
@@ -41,4 +41,6 @@ rtt_baseline["RTT"] = rtt_baseline["RTT"].str.replace("ns", "").astype(float)
 plot_metric("RTT", rtt_method, rtt_baseline, "RTT (ms)", "plot_comparison/compete/rtt_comparison.png")
 
 # Plot Throughput
+throughput_method = throughput_method.loc[throughput_method["Throughput"] <= 16]
+throughput_baseline = throughput_baseline.loc[throughput_baseline["Throughput"] <= 16]
 plot_metric("Throughput", throughput_method, throughput_baseline, "Throughput", "plot_comparison/compete/throughput_comparison.png")
