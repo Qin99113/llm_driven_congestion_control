@@ -1,0 +1,7 @@
+Current network topology with three senders S0 S1 S2, two routers R1 R2, and three receivers RE0 RE1 RE2, where: Links from all senders to R1 have a bandwidth of 1000 Mbps with a delay of 5 ms respectivaly; Link between R1 and R2 (the bottleneck) has a bandwidth of 15 Mbps and a delay of 10 ms; Link from R2 to all three receivers have a bandwidth of 1000 Mbps with a delay of 5 ms respectively.
+base algorithm: TCP NewReno
+cwnd: 72431
+ssthreshold: 51404
+RTT: +1.01121e+08ns
+throughput: 16.08 kbps
+current trigger latency llm threshold: +1e+08ns ms
