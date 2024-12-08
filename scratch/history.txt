@@ -1,7 +1,0 @@
-topology description: Star topology with 5 nodes, each connected to a central hub.
-base algorithm: TCP NewReno
-cwnd: 32
-ssthreshold: 20
-RTT: +3e+08ns
-throughput: 0.36 kbps
-current trigger latency llm threshold: +1e+08ns ms
