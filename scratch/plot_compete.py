@@ -17,7 +17,7 @@ throughput = pd.read_csv("tcp_llm_results/2min_best_tcp_llm_multi_sender_compete
 # cwnd1 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_compete/cwnd_1.dat", delim_whitespace=True, header=None, names=["Time", "CWND1"])
 # cwnd2 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_compete/cwnd_2.dat", delim_whitespace=True, header=None, names=["Time", "CWND2"])
 # queue_size = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_compete/queueSize.dat", delim_whitespace=True, header=None, names=["Time", "QueueSize"])
-# rtt0 = pd.read_csv("tcp_newreno_results/2tcp_llm_multi_sender_compete/rtt_0.dat", delim_whitespace=True, header=None, names=["Time", "RTT0"])
+# rtt0 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_compete/rtt_0.dat", delim_whitespace=True, header=None, names=["Time", "RTT0"])
 # rtt1 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_compete/rtt_1.dat", delim_whitespace=True, header=None, names=["Time", "RTT1"])
 # rtt2 = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_compete/rtt_2.dat", delim_whitespace=True, header=None, names=["Time", "RTT2"])
 # throughput = pd.read_csv("tcp_newreno_results/tcp_llm_multi_sender_compete/throughput.dat", delim_whitespace=True, header=None, names=["Time", "Throughput"])
