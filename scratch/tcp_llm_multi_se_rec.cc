@@ -1,4 +1,9 @@
-
+/*
+ * Copyright (c) 2024 Xiaoxuan Qin and Yufei Wang
+ * Licensed under the MIT License (see LICENSE file).
+ * Based on the work of Aarti Nandagiri <aarti.nandagiri@gmail.com>, Vivek Jain <jain.vivek.anand@gmail.com>
+ * and Mohit P. Tahiliani <tahiliani@nitk.edu.in> at https://www.nsnam.org/docs/release/3.34/doxygen/tcp-bbr-example_8cc_source.html.
+ */
 //                                                 
 // [sender0]---1000Mbps---  [Router1]---15Mbps---[Router2]     ---1000Mbps---[receiver0]
 // [sender1]---1000Mbps---                                     ---1000Mbps---[receiver1]

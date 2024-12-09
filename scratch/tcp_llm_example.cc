@@ -1,22 +1,8 @@
 /*
- * Copyright (c) 2018-20 NITK Surathkal
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Authors: Aarti Nandagiri <aarti.nandagiri@gmail.com>
- *          Vivek Jain <jain.vivek.anand@gmail.com>
- *          Mohit P. Tahiliani <tahiliani@nitk.edu.in>
+ * Copyright (c) 2024 Xiaoxuan Qin and Yufei Wang
+ * Licensed under the MIT License (see LICENSE file).
+ * Based on the work of Aarti Nandagiri <aarti.nandagiri@gmail.com>, Vivek Jain <jain.vivek.anand@gmail.com>
+ * and Mohit P. Tahiliani <tahiliani@nitk.edu.in> at https://www.nsnam.org/docs/release/3.34/doxygen/tcp-bbr-example_8cc_source.html.
  */
 
 // This program simulates the following topology:
@@ -28,22 +14,7 @@
 // The link between R1 and R2 is a bottleneck link with 10 Mbps. All other
 // links are 1000 Mbps.
 //
-// This program runs by default for 100 seconds and creates a new directory
-// called 'bbr-results' in the ns-3 root directory. The program creates one
-// sub-directory called 'pcap' in 'bbr-results' directory (if pcap generation
-// is enabled) and three .dat files.
-//
-// (1) 'pcap' sub-directory contains six PCAP files:
-//     * bbr-0-0.pcap for the interface on Sender
-//     * bbr-1-0.pcap for the interface on Receiver
-//     * bbr-2-0.pcap for the first interface on R1
-//     * bbr-2-1.pcap for the second interface on R1
-//     * bbr-3-0.pcap for the first interface on R2
-//     * bbr-3-1.pcap for the second interface on R2
-// (2) cwnd.dat file contains congestion window trace for the sender node
-// (3) throughput.dat file contains sender side throughput trace
-// (4) queueSize.dat file contains queue length trace from the bottleneck link
-//
+
 
 #include "ns3/applications-module.h"
 #include "ns3/core-module.h"
