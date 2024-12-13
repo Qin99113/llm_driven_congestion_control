@@ -46,16 +46,18 @@
    cd ..
 
 4. Run the experiments:
-   - `tcp_llm_example.cc`: This is a simple example to show how to use the LLM algorithm and results will be collected in the folder `tcp_llm_one_sender_results`.
+   - `tcp_llm_example.cc`: This is a simple example to show how to use the LLM algorithm in a one sender and one receiver scenario and results will be collected in the folder `tcp_llm_one_sender_results`.
    - `tcp_llm_multi_sender.cc`: This is an example to show how to use the LLM algorithm with multiple senders and results will be collected in the folder `tcp_llm_multi_sender_results`.
-   - `tcp_llm_multi_compete.cc`: This is an example to show how to use the LLM algorithm with multiple senders and multiple receivers and results will be collected in the folder `tcp_llm_multi_compete_results`.
-   - `tcp_llm_multi_se_rec.cc`: This is an example to show how to use the LLM algorithm with multiple senders and multiple receivers and results will be collected in the folder `tcp_llm_multi_se_rec_results`.
+   - `tcp_llm_multi_compete.cc`: This is an example to show how to use the LLM algorithm with multiple senders in two different congestion control algorithms, one for traditional TCP NewReno and one for the TCP-LLM algorithm, and results will be collected in the folder `tcp_llm_multi_compete_results`.
+   - `tcp_llm_multi_se_rec.cc`: This is an example to show how to use the LLM algorithm with multiple senders and multiple receivers to show how the TCP-LLM algorithm can handle in complex scenarios and results will be collected in the folder `tcp_llm_multi_se_rec_results`.
    - **Note:** You can change the `TcpVariant` parameter in the code to either `TcpNewReno` or `TcpLlm` to run the experiment for both variants.
    - **Note:** You can change the `stopTime` parameter in the code to run the experiment for different simulation times.
    ```bash
    ./ns3 run scratch/tcp_llm_example.cc
    ```
    - **Note:** You need to store the result folders in a separate directory for each experiment due to overwriting of results.
+
+   - **Note:** You can run the experiments for different LLM models, for here is gpt-o1 mini by modifying the file `0_1_prompts_test.py`.
 
 ### Results
 1. The results will be stored in the respective folders mentioned in the previous section.
