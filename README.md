@@ -6,7 +6,7 @@
 - **TCP NewReno**
 
 ## LLM Used
-- **OpenAI** gpt-4o mini and gpt-o1 mini
+- **OpenAI** gpt-4o mini and gpt-o1 mini//
 
 ---
 
